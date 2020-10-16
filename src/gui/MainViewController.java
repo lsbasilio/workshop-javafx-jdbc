@@ -3,6 +3,7 @@ package gui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import application.Main;
 import gui.util.Alerts;
@@ -36,13 +37,16 @@ public class MainViewController implements Initializable {
 	@FXML
 	 public void onMenuItemDepartmentAction() {
 		//System.out.println("onMenuItemDepartmentAction");
-		loadView2("/gui/DepartmentList.fxml");
+		loadView("/gui/DepartmentList.fxml", (DepartmentListController controller) -> {
+			controller.setDepartmentService(new DepartmentService());
+			controller.updateTableView();
+		});
 	}
 	
 	@FXML
 	 public void onMenuItemAboutAction() {
 		//System.out.println("onMenuItemAboutAction");
-		loadView("/gui/About.fxml");
+		loadView("/gui/About.fxml", x -> {}); // Expressao Lambda vazia
 	}
 	
 	@Override
@@ -50,7 +54,7 @@ public class MainViewController implements Initializable {
 		
 	}
 	
-	private synchronized void loadView(String absoluteName) {
+	private synchronized <T> void loadView(String absoluteName, Consumer<T> initializingAction) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVBox = loader.load();
@@ -64,14 +68,15 @@ public class MainViewController implements Initializable {
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(newVBox.getChildren());
 			
-			
+			T controller = loader.getController();
+			initializingAction.accept(controller);
 		}
 		catch (IOException e) {
 			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);			
 		}
 	}
 	
-	private synchronized void loadView2(String absoluteName) {
+/**	private synchronized void loadView2(String absoluteName) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			VBox newVBox = loader.load();
@@ -94,5 +99,6 @@ public class MainViewController implements Initializable {
 			Alerts.showAlert("IOException", "Error loading view", e.getMessage(), AlertType.ERROR);			
 		}
 	}
+**/
 	
 }
