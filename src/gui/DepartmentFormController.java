@@ -131,12 +131,13 @@ public class DepartmentFormController implements Initializable {
 			throw new IllegalStateException("Entity was null");
 		}
 		String id = String.valueOf(entity.getId());
-		if (id == "null") {
-			txtId.setText("");
-		}
-		else {
-			txtId.setText(id);
-		}
+//		if (id == "null") {
+//			txtId.setText("");
+//		}
+//		else {
+//			txtId.setText(id);
+//		}		
+		txtId.setText(id == "null" ? "" : id);
 		txtName.setText(entity.getName());
 	}
 	
