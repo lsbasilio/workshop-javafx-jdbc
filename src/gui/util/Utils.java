@@ -69,7 +69,7 @@ public class Utils {
 		datePicker.setConverter(new StringConverter<LocalDate>() {
 			DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(format);
 			{
-				datePicker.setPromptText(format.toLowerCase());
+				datePicker.setPromptText(format);//.toLowerCase());
 			}
 
 			@Override
